@@ -113,8 +113,6 @@ module.exports = {
 	getCpuUsage : getCpuUsage,
 	getDiskUsage : getDiskUsage,
 	getBlockHeight : getBlockHeight,
-	getPeerCount : getPeerCount,
 	getDeamonStatus : getDeamonStatus,
-	checkDialPort : checkDialPort,
-	getBlockHeight : getBlockHeight
+	checkDialPort : checkDialPort
 }
