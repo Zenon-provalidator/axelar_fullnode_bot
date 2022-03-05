@@ -1,14 +1,6 @@
 const cfg = require('dotenv').config({ path: './config' }).parsed //load config file
 const exec = require('child_process').execSync
 
-//memory
-const getRpcHeight = (async () => {
-	let cmd = `curl -s '${cfg.EXTERN_RPC_URL}/status' | jq '.result.sync_info.latest_block_height' | tr -d '"'`
-	let res = await exec(cmd)
-	let blockHeight = parseInt(res.toString())
-	return blockHeight
-})
-
 // block height
 const getRpcHeight = (async (coin) => {
 	switch (coin){
