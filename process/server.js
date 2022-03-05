@@ -82,21 +82,22 @@ const checkDialPort = (async () => {
 
 // block height
 const getBlockHeight = (async (coin) => {
+	let cmd = ``
 	switch (coin){
 		case "eth" :
-			let cmd = `height=$(curl -H "Content-Type: application/json" -d '{"id":1, "jsonrpc":"2.0", "method": "eth_blockNumber", "params":[]}' localhost:8545 | jq .result | tr -d '"') && printf '%d\n' $height`
+			cmd = `height=$(curl -H "Content-Type: application/json" -d '{"id":1, "jsonrpc":"2.0", "method": "eth_blockNumber", "params":[]}' localhost:8545 | jq .result | tr -d '"') && printf '%d\n' $height`
 			break
 		case "polygon" :
-			let cmd = `height=$(curl -H "Content-Type: application/json" -d '{"id":1, "jsonrpc":"2.0", "method": "eth_blockNumber", "params":[]}' localhost:8545 | jq .result | tr -d '"') && printf '%d\n' $height`
+			cmd = `height=$(curl -H "Content-Type: application/json" -d '{"id":1, "jsonrpc":"2.0", "method": "eth_blockNumber", "params":[]}' localhost:8545 | jq .result | tr -d '"') && printf '%d\n' $height`
 			break
 		case "fantom" :
-			let cmd = `height=$(curl -H "Content-Type: application/json" -d '{"id":1, "jsonrpc":"2.0", "method": "eth_blockNumber", "params":[]}' localhost:18545 | jq .result | tr -d '"') && printf '%d\n' $height`
+			cmd = `height=$(curl -H "Content-Type: application/json" -d '{"id":1, "jsonrpc":"2.0", "method": "eth_blockNumber", "params":[]}' localhost:18545 | jq .result | tr -d '"') && printf '%d\n' $height`
 			break
 		case "moonbeam" :
-			let cmd = `height=$(curl -H "Content-Type: application/json" -d '{"id":1, "jsonrpc":"2.0", "method": "eth_blockNumber", "params":[]}' localhost:9933 | jq .result | tr -d '"') && printf '%d\n' $height`
+			cmd = `height=$(curl -H "Content-Type: application/json" -d '{"id":1, "jsonrpc":"2.0", "method": "eth_blockNumber", "params":[]}' localhost:9933 | jq .result | tr -d '"') && printf '%d\n' $height`
 			break
 		case "avax" :
-			let cmd = `height=$(curl --location --request POST 'https://api.avax.network/ext/bc/C/rpc' --header 'Content-Type: application/json' --data-raw '{ "jsonrpc": "2.0", "method": "eth_blockNumber", "params": [], "id": 1}' | jq .result | tr -d '"') && printf '%d\n' $height`
+			cmd = `height=$(curl --location --request POST 'http://localhost:9650/ext/bc/C/rpc' --header 'Content-Type: application/json' --data-raw '{ "jsonrpc": "2.0", "method": "eth_blockNumber", "params": [], "id": 1}' | jq .result | tr -d '"') && printf '%d\n' $height`
 			break			
 	}
 	let res = await exec(cmd)
