@@ -10,11 +10,7 @@ const CronJob = require('cron').CronJob
 let memAlertCnt = 0
 let cpuAlertCnt = 0
 let diskAlertCnt = 0
-let peerAlertCnt = 0
-let lcdAlertCnt = 0
-let checkedBlockHeight = 0
-let missedBlockHeight = 0
-let validatorConnectTryCnt = 0
+let rpcHeight = 0
 let botStatusFlag = false
 let executeCnt = 0
 let blockCheck = [] // block check height array
@@ -72,13 +68,13 @@ const botJob = new CronJob(`*/10 * * * * *`, async function () {
 	
 		if(blockCheck.length > 1){ //need history
 			if(heightDiff > cfg.SERVER_ALERT_BLOCK_ERROR_RANGE){ // server block height is abnormal
-				let rpcHeight = await rpc.getRpcHeight(cfg.PROJECT_NAME)
+				rpcHeight = await rpc.getRpcHeight(cfg.PROJECT_NAME)
 				//block height smaller than extern block height
 				if(blockCheck[executeCnt] < rpcHeight -1 ){
 					alert.sendMSG(`ALERT! Server height is abnormal.\n${cfg.EXTERN_RPC_URL}/status\nExtern=${rpcHeight.toLocaleString()}\nDiff=${heightDiff.toLocaleString()}\nCurrentblockheight=${blockCheck[executeCnt].toLocaleString()}\nPreblockheight=${blockCheck[executeCnt-1].toLocaleString()}`)
 				}
 			} else {
-				let rpcHeight = await rpc.getRpcHeight(cfg.PROJECT_NAME)
+				rpcHeight = await rpc.getRpcHeight(cfg.PROJECT_NAME)
 				if(blockCheck[executeCnt] === blockCheck[executeCnt-1] === blockCheck[executeCnt-2] === blockCheck[executeCnt-3] === blockCheck[executeCnt-4]){ //chain is stop
 					alert.sendMSG(`ALERT! Maybe chain is down.\n${cfg.EXTERN_RPC_URL}/status\nExtern=${rpcHeight.toLocaleString()}\nDiff=${heightDiff.toLocaleString()}\nCurrentblockheight=${blockCheck[executeCnt].toLocaleString()}\nPreblockheight=${blockCheck[executeCnt-1].toLocaleString()}`)
 				}else{
