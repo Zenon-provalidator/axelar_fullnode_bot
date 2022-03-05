@@ -10,7 +10,6 @@ const CronJob = require('cron').CronJob
 let memAlertCnt = 0
 let cpuAlertCnt = 0
 let diskAlertCnt = 0
-let rpcHeight = 0
 let botStatusFlag = false
 let executeCnt = 0
 let blockCheck = [] // block check height array
@@ -20,14 +19,17 @@ const botJob = new CronJob(`*/10 * * * * *`, async function () {
 	let cpu = await server.getCpuUsage()
 	let disk = await server.getDiskUsage()
 	let blockHeight = await server.getBlockHeight(cfg.PROJECT_NAME)
+	let rpcHeight = await rpc.getRpcHeight(cfg.PROJECT_NAME)
 	let checkDialPort = await server.checkDialPort()
 	
 	telegramBot.setVariables({
 		mem : mem,
 		cpu : cpu,
 		disk : disk,
-		blockHeight : blockHeight
+		blockHeight : blockHeight,
+		rpcHeight : rpcHeight
 	})
+	
 	// memory check
 	if(mem > parseFloat(cfg.SERVER_ALERT_MEMORY)) {
 		if(memAlertCnt == 0){
@@ -68,18 +70,13 @@ const botJob = new CronJob(`*/10 * * * * *`, async function () {
 	
 		if(blockCheck.length > 1){ //need history
 			if(heightDiff > cfg.SERVER_ALERT_BLOCK_ERROR_RANGE){ // server block height is abnormal
-				rpcHeight = await rpc.getRpcHeight(cfg.PROJECT_NAME)
 				//block height smaller than extern block height
 				if(blockCheck[executeCnt] < rpcHeight -1 ){
 					alert.sendMSG(`ALERT! Server height is abnormal.\n${cfg.EXTERN_RPC_URL}/status\nExtern=${rpcHeight.toLocaleString()}\nDiff=${heightDiff.toLocaleString()}\nCurrentblockheight=${blockCheck[executeCnt].toLocaleString()}\nPreblockheight=${blockCheck[executeCnt-1].toLocaleString()}`)
 				}
 			} else {
-				rpcHeight = await rpc.getRpcHeight(cfg.PROJECT_NAME)
 				if(blockCheck[executeCnt] === blockCheck[executeCnt-1] === blockCheck[executeCnt-2] === blockCheck[executeCnt-3] === blockCheck[executeCnt-4]){ //chain is stop
 					alert.sendMSG(`ALERT! Maybe chain is down.\n${cfg.EXTERN_RPC_URL}/status\nExtern=${rpcHeight.toLocaleString()}\nDiff=${heightDiff.toLocaleString()}\nCurrentblockheight=${blockCheck[executeCnt].toLocaleString()}\nPreblockheight=${blockCheck[executeCnt-1].toLocaleString()}`)
-				}else{
-					// normal
-	//				logger.info(`Diff=${heightDiff.toLocaleString()}\nCurrentblockheight=${blockCheck[executeCnt].toLocaleString()}\nPreblockheight=${blockCheck[executeCnt-1].toLocaleString()}`)
 				}
 			}
 		}
