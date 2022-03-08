@@ -62,24 +62,28 @@ const botJob = new CronJob(`*/10 * * * * *`, async function () {
 	
 	// block height check
 	if(checkDialPort) {
-		blockCheck[executeCnt] = blockHeight
-		let heightDiff = blockCheck[executeCnt] - blockCheck[executeCnt-1]
-	
-	//	logger.info(`executeCnt:${executeCnt}`)
-	//	logger.info(`blockCheck.length:${blockCheck.length}`)
-	
-		if(blockCheck.length > 1){ //need history
-			if(heightDiff > cfg.SERVER_ALERT_BLOCK_ERROR_RANGE){ // server block height is abnormal
-				//block height smaller than extern block height
-				if(blockCheck[executeCnt] < rpcHeight -1 ){
-					alert.sendMSG(`ALERT! Server height is abnormal.\n${cfg.EXTERN_RPC_URL}/status\nExtern=${rpcHeight.toLocaleString()}\nDiff=${heightDiff.toLocaleString()}\nCurrentblockheight=${blockCheck[executeCnt].toLocaleString()}\nPreblockheight=${blockCheck[executeCnt-1].toLocaleString()}`)
-				}
-			} else {
-				if(blockCheck[executeCnt] === blockCheck[executeCnt-1] === blockCheck[executeCnt-2] === blockCheck[executeCnt-3] === blockCheck[executeCnt-4]){ //chain is stop
-					alert.sendMSG(`ALERT! Maybe chain is down.\n${cfg.EXTERN_RPC_URL}/status\nExtern=${rpcHeight.toLocaleString()}\nDiff=${heightDiff.toLocaleString()}\nCurrentblockheight=${blockCheck[executeCnt].toLocaleString()}\nPreblockheight=${blockCheck[executeCnt-1].toLocaleString()}`)
-				}
-			}
+		let heightDiff = rpcHeight-blockHeight
+		if(heightDiff > cfg.SERVER_ALERT_BLOCK_ERROR_RANGE){
+			alert.sendMSG(`ALERT! Server height is abnormal.\n${cfg.EXTERN_RPC_URL}/status\nExtern=${rpcHeight.toLocaleString()}\nDiff=${heightDiff.toLocaleString()}\nCurrentblockheight=${blockCheck[executeCnt].toLocaleString()}\nPreblockheight=${blockCheck[executeCnt-1].toLocaleString()}`)			
 		}
+//		blockCheck[executeCnt] = blockHeight
+//		let heightDiff = blockCheck[executeCnt] - blockCheck[executeCnt-1]
+//	
+//	//	logger.info(`executeCnt:${executeCnt}`)
+//	//	logger.info(`blockCheck.length:${blockCheck.length}`)
+//	
+//		if(blockCheck.length > 1){ //need history
+//			if(heightDiff > cfg.SERVER_ALERT_BLOCK_ERROR_RANGE){ // server block height is abnormal
+//				//block height smaller than extern block height
+//				if(blockCheck[executeCnt] < rpcHeight -1 ){
+//					alert.sendMSG(`ALERT! Server height is abnormal.\n${cfg.EXTERN_RPC_URL}/status\nExtern=${rpcHeight.toLocaleString()}\nDiff=${heightDiff.toLocaleString()}\nCurrentblockheight=${blockCheck[executeCnt].toLocaleString()}\nPreblockheight=${blockCheck[executeCnt-1].toLocaleString()}`)
+//				}
+//			} else {
+//				if(blockCheck[executeCnt] === blockCheck[executeCnt-1] === blockCheck[executeCnt-2] === blockCheck[executeCnt-3] === blockCheck[executeCnt-4]){ //chain is stop
+//					alert.sendMSG(`ALERT! Maybe chain is down.\n${cfg.EXTERN_RPC_URL}/status\nExtern=${rpcHeight.toLocaleString()}\nDiff=${heightDiff.toLocaleString()}\nCurrentblockheight=${blockCheck[executeCnt].toLocaleString()}\nPreblockheight=${blockCheck[executeCnt-1].toLocaleString()}`)
+//				}
+//			}
+//		}
 	} else {
 		alert.sendMSG(`ALERT! Dialingport is not opened.`)
 	}
