@@ -88,7 +88,7 @@ const getBlockHeight = (async (coin) => {
 			cmd = `height=$(curl -H "Content-Type: application/json" -d '{"id":1, "jsonrpc":"2.0", "method": "eth_blockNumber", "params":[]}' localhost:8545 | jq .result | tr -d '"') && printf '%d\n' $height`
 			break
 		case "polygon" :
-			cmd = `height=$(curl -H "Content-Type: application/json" -d '{"id":1, "jsonrpc":"2.0", "method": "eth_blockNumber", "params":[]}' localhost:8545 | jq .result | tr -d '"') && printf '%d\n' $height`
+			cmd = `curl  localhost:8545 -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0", "id":1, "method":"bor_getSnapshot", "params":[]}' | jq .result.number`
 			break
 		case "fantom" :
 			cmd = `height=$(curl -H "Content-Type: application/json" -d '{"id":1, "jsonrpc":"2.0", "method": "eth_blockNumber", "params":[]}' localhost:18545 | jq .result | tr -d '"') && printf '%d\n' $height`
