@@ -34,7 +34,7 @@ bot.command('server', (ctx) => {
 		let blockHeight = typeof variables.blockHeight === undefined ? undefined : variables.blockHeight.toLocaleString()
 		let rpcHeight = typeof variables.rpcHeight === undefined ? undefined : variables.rpcHeight.toLocaleString()
 		let heightDiff = rpcHeight-blockHeight
-		ctx.reply(`${cfg.PROJECT_NAME}_${cfg.SERVER_NAME}_${cfg.SERVER_TYPE}\nMemory : ${variables.mem}%\nCpu : ${variables.cpu}%\nDisk : ${variables.disk}%\nLatestHeight : ${blockHeight}\nrpcHeight : ${rpcHeight}\nheightDiff : ${heightDiff}`)
+		ctx.reply(`${cfg.PROJECT_NAME}_${cfg.SERVER_NAME}_${cfg.SERVER_TYPE}\nMemory : ${variables.mem}%\nCpu : ${variables.cpu}%\nDisk : ${variables.disk}%\nLatestHeight : ${blockHeight}\nrpcHeight : ${rpcHeight}\nheightDiff : ${heightDiff.toLocaleString()}`)
 	} catch (err){
 		ctx.reply(err)
 	}	
