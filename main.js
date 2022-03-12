@@ -64,7 +64,7 @@ const botJob = new CronJob(`*/10 * * * * *`, async function () {
 	if(checkDialPort) {
 		let heightDiff = rpcHeight-blockHeight
 		if(heightDiff > cfg.SERVER_ALERT_BLOCK_ERROR_RANGE){
-			alert.sendMSG(`ALERT! Server height is abnormal.\n${cfg.EXTERN_RPC_URL}/status\nExtern=${rpcHeight.toLocaleString()}\nDiff=${heightDiff.toLocaleString()}\nCurrentblockheight=${blockCheck[executeCnt].toLocaleString()}\nPreblockheight=${blockCheck[executeCnt-1].toLocaleString()}`)			
+			alert.sendMSG(`ALERT! Server height is abnormal.\n${cfg.EXTERN_RPC_URL}/status\nExtern=${rpcHeight.toLocaleString()}\nheightDiff=${heightDiff.toLocaleString()}`)			
 		}
 //		blockCheck[executeCnt] = blockHeight
 //		let heightDiff = blockCheck[executeCnt] - blockCheck[executeCnt-1]
